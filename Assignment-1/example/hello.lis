@@ -1,0 +1,232 @@
+     1                                  ;****************************************************************************************************************************
+     2                                  ;Program name: "String I/O Demonstration 1.5".  This program demonstrates how to input and output a string with embedded    *
+     3                                  ;shite space.  Copyright (C) 2021  Floyd Holliday                                                                           *
+     4                                  ;This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License  *
+     5                                  ;version 3 as published by the Free Software Foundation.                                                                    *
+     6                                  ;This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied         *
+     7                                  ;warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.     *
+     8                                  ;A copy of the GNU General Public License v3 is available here:  <https://www.gnu.org/licenses/>.                           *
+     9                                  ;****************************************************************************************************************************
+    10                                  
+    11                                  
+    12                                  
+    13                                  
+    14                                  ;========1=========2=========3=========4=========5=========6=========7=========8=========9=========0=========1=========2=========3=========4=========5=========6=========7**
+    15                                  ;Author information
+    16                                  ;  Author name: Floyd Holliday
+    17                                  ;  Author email: holliday@fullerton.edu or activeprofessor@yahoo.com or both
+    18                                  ;
+    19                                  ;Program information
+    20                                  ; Program name: String I/O 1.5
+    21                                  ;  Programming languages X86 with one module in C++
+    22                                  ;  Date development of version 1.5 began 2021-Aug-19
+    23                                  ;  Date development of version 1.5 completed 2021-Aug-19
+    24                                  ;
+    25                                  ;Purpose
+    26                                  ;  This program will serve to introduce X86 programming to new programmers.
+    27                                  ;
+    28                                  ;Project information
+    29                                  ;  Files: good_morning.cpp, hello.asm, run.sh
+    30                                  ;  Status: The program has been tested extensively with no detectable errors.
+    31                                  ;
+    32                                  ;Translator information
+    33                                  ;  Linux: nasm -f elf64 -l hello.lis -o hello.o hello.asm
+    34                                  ;References and credits
+    35                                  ;  Seyfarth, Chapter 11
+    36                                  
+    37                                  ;Format information
+    38                                  ;  Page width: 172 columns
+    39                                  ;  Begin comments: 61
+    40                                  ;  Optimal print specification: Landscape, 7 points, monospace, 8Â½x11 paper
+    41                                  ;
+    42                                  ;===== Begin code area ====================================================================================================================================================
+    43                                  
+    44                                  extern printf                                               ;External C++ function for writing to standard output device
+    45                                  
+    46                                  extern scanf                                                ;External C++ function for reading from the standard input device
+    47                                  
+    48                                  extern fgets                                                ;Function borrowed from one of the C libraries.
+    49                                  
+    50                                  extern stdin                                                ;Symbolic name of the standard input device.  Usually refers to keyboard.
+    51                                  
+    52                                  extern strlen                                               ;Function borrowed from one of the C libraries.
+    53                                  
+    54                                  global hello_world                                          ;This makes hello_world callable by functions outside of this file.
+    55                                  
+    56                                  max_name_size equ 32                                        ;Maximum number of characters accepted for input
+    57                                  
+    58                                  three_point_five equ 0x400C000000000000                     ;3.5 in decimal..
+    59                                  
+    60                                  segment .data                                               ;Place initialized data here
+    61                                  
+    62                                  ;===== Declare some messages ==============================================================================================================================================
+    63                                  ;The identifiers in this segment are quadword pointers to ascii strings stored in heap space.  They are not variables.  They are not constants.  There are no constants in
+    64                                  ;assembly programming.  There are no variables in assembly programming: the registers assume the role of variables.
+    65                                  
+    66                                  align 16                                                   ;Insure that the next data declaration starts on a 16-byte boundary.
+    67                                  
+    68 00000000 48656C6C6F2070726F-     initialmessage db "Hello programmer", 10, 0
+    68 00000009 6772616D6D65720A00 
+    69                                  
+    70 00000012 576861742069732079-     promptmessage db "What is your name? ", 0
+    70 0000001B 6F7572206E616D653F-
+    70 00000024 2000               
+    71                                  
+    72 00000026 546865206E756D6265-     string_length_information db "The number of characters in your name is %2ld",10,0
+    72 0000002F 72206F662063686172-
+    72 00000038 61637465727320696E-
+    72 00000041 20796F7572206E616D-
+    72 0000004A 652069732025326C64-
+    72 00000053 0A00               
+    73                                  
+    74 00000055 4974206973206E6963-     outputmessage db "It is nice to meet you ", 0
+    74 0000005E 6520746F206D656574-
+    74 00000067 20796F752000       
+    75                                  
+    76 0000006D 4920686F706520746F-     goodbye db "I hope to meet you again.  Enjoy your X86 programming.", 10, 0
+    76 00000076 206D65657420796F75-
+    76 0000007F 20616761696E2E2020-
+    76 00000088 456E6A6F7920796F75-
+    76 00000091 72205838362070726F-
+    76 0000009A 6772616D6D696E672E-
+    76 000000A3 0A00               
+    77                                  
+    78 000000A5 257300                  stringformat db "%s", 0                                     ;general string format
+    79                                  
+    80 000000A8 90<rept>                align 64                                                    ;Insure that the next data declaration starts on a 64-byte boundary.
+    81                                  
+    82                                  segment .bss                                                ;Declare pointers to un-initialized space in this segment.
+    83                                  
+    84 00000000 <res 00000020>          programmers_name resb max_name_size                         ;Create char of size max_name_size bytes
+    85                                  
+    86                                  ;==========================================================================================================================================================================
+    87                                  ;===== Begin the application here: show how to input and output strings ===================================================================================================
+    88                                  ;==========================================================================================================================================================================
+    89                                  
+    90                                  segment .text                                               ;Place executable instructions in this segment.
+    91                                  
+    92                                  hello_world:                                                ;Entry point.  Execution begins here.
+    93                                  
+    94                                  ;Prolog  Back up the GPRs.  There are 15 pushes here.
+    95 00000000 55                      push rbp
+    96 00000001 4889E5                  mov rbp, rsp
+    97 00000004 53                      push rbx
+    98 00000005 51                      push rcx
+    99 00000006 52                      push rdx
+   100 00000007 57                      push rdi
+   101 00000008 56                      push rsi
+   102 00000009 4150                    push r8
+   103 0000000B 4151                    push r9
+   104 0000000D 4152                    push r10
+   105 0000000F 4153                    push r11
+   106 00000011 4154                    push r12
+   107 00000013 4155                    push r13
+   108 00000015 4156                    push r14
+   109 00000017 4157                    push r15
+   110 00000019 9C                      pushf
+   111                                  
+   112                                  ;=========== Show the initial message =====================================================================================================================================
+   113                                  ;Note that at this point there are no vital data in registers to be saved.  Therefore, there is no back up process at this time.
+   114                                  
+   115 0000001A B800000000              mov qword  rax, 0                                           ;No data from SSE will be printed
+   116 0000001F 48BF-                   mov        rdi, stringformat                                ;"%s"
+   116 00000021 [A500000000000000] 
+   117 00000029 48BE-                   mov        rsi, initialmessage                             ;"Hello programmer"
+   117 0000002B [0000000000000000] 
+   118 00000033 E8(00000000)            call       printf                                           ;Call a C library function to make the output
+   119                                  
+   120                                  ;=========== Prompt for programmer's name =================================================================================================================================
+   121                                  
+   122 00000038 B800000000              mov qword  rax, 0                                           ;No data from SSE will be printed
+   123 0000003D 48BF-                   mov        rdi, stringformat                                ;"%s"
+   123 0000003F [A500000000000000] 
+   124 00000047 48BE-                   mov        rsi, promptmessage                              ;"What is your name? "
+   124 00000049 [1200000000000000] 
+   125 00000051 E8(00000000)            call       printf                                           ;Call a library function to make the output
+   126                                  
+   127                                  ;===== Obtain the user's name =============================================================================================================================================
+   128                                  
+   129                                  ;------------Old style---------------------------------------------------------------------------------------------------------------------------------------|
+   130                                  ;mov qword  rax, 0                                          ;SSE is not involved in this scanf operation                                                     |
+   131                                  ;mov        rdi, stringformat                               ;"%s"                                                                                            |
+   132                                  ;mov        rsi, hello_world.programmers_name               ;Give scanf a pointer to the reserved storage                                                    |
+   133                                  ;call       scanf                                           ;Call a library function to do the input the string; however, this function stops on white space.|
+   134                                  ;-----------End of old style---------------------------------------------------------------------------------------------------------------------------------|
+   135                                  
+   136 00000056 B800000000              mov qword rax, 0                                            ;SSE is not involved in this scanf operation
+   137 0000005B 48BF-                   mov       rdi, programmers_name                             ;Copy to rdi the pointer to the start of the array of 32 bytes
+   137 0000005D [0000000000000000] 
+   138 00000065 BE20000000              mov       rsi, max_name_size                                ;Provide to fgets the size of the storage made available for input
+   139 0000006A 488B1425[00000000]      mov       rdx, [stdin]                                      ;stdin is a pointer to the device; rdx receives the device itself
+   140 00000072 E8(00000000)            call      fgets                                             ;Call the C function to get a line of text and stop when NULL is encountered or 31 chars have been stored.
+   141                                  
+   142                                  ;Compute the length of the inputted cstring.
+   143 00000077 B800000000              mov qword rax, 0
+   144 0000007C 48BF-                   mov       rdi, programmers_name
+   144 0000007E [0000000000000000] 
+   145 00000086 E8(00000000)            call      strlen
+   146 0000008B 4989C5                  mov       r13, rax                                          ;The length of the string is saved in r13
+   147                                  
+   148                                  ;Output the length of the user's name cstring
+   149 0000008E B800000000              mov qword rax, 0
+   150 00000093 48BF-                   mov       rdi, string_length_information
+   150 00000095 [2600000000000000] 
+   151 0000009D 4C89EE                  mov       rsi, r13
+   152 000000A0 E8(00000000)            call      printf
+   153                                  
+   154                                  ;===== Reply to the user ==================================================================================================================================================
+   155                                  
+   156 000000A5 B800000000              mov        rax, 0                                           ;No data from SSE will be printed
+   157 000000AA 48BF-                   mov        rdi, stringformat                                ;"%s"
+   157 000000AC [A500000000000000] 
+   158 000000B4 48BE-                   mov        rsi, outputmessage                               ;"It is nice to meet you "
+   158 000000B6 [5500000000000000] 
+   159 000000BE E8(00000000)            call       printf                                           ;Call a library function to do the output
+   160                                  
+   161 000000C3 B800000000              mov        rax, 0                                           ;No data from SSE will be printed
+   162 000000C8 48BF-                   mov        rdi, stringformat                                ;"%s"
+   162 000000CA [A500000000000000] 
+   163 000000D2 48BE-                   mov        rsi, programmers_name                            ;Place a pointer to the programmer's name in rsi
+   163 000000D4 [0000000000000000] 
+   164 000000DC E8(00000000)            call       printf                                           ;Call a library function to do the output
+   165                                  
+   166                                  ;======= Show farewell message ============================================================================================================================================
+   167                                  
+   168 000000E1 B800000000              mov qword rax, 0                                            ;No data from SSE will be printed
+   169 000000E6 48BF-                   mov       rdi, stringformat                                 ;"%s"
+   169 000000E8 [A500000000000000] 
+   170 000000F0 48BE-                   mov       rsi, goodbye                                      ;"I hope to meet you again.  Enjoy your X86 programming."
+   170 000000F2 [6D00000000000000] 
+   171 000000FA E8(00000000)            call      printf                                            ;Call a library function to do the output
+   172                                  
+   173                                  ;======= Return the nice number, that is now stored in a named constant, to the calling program. ===========================================================
+   174                                  
+   175 000000FF 48B80000000000000C-     mov       rax, qword three_point_five                       ;The goal is to put a copy of 3.5 in xmm0
+   175 00000108 40                 
+   176 00000109 50                      push      rax                                               ;Now three_point_five is on top of the stack
+   177 0000010A F20F100424              movsd     xmm0, [rsp]                                       ;Now there is a copy of 3.5 in xmm0
+   178 0000010F 58                      pop       rax                                               ;Return the stack to its former state
+   179                                  
+   180                                  ;===== Restore the pointer to the start of the stack frame before exiting from this function ===============================================================
+   181                                  
+   182                                  ;Epilogue: restore data to the values held before this function was called.
+   183 00000110 9D                      popf
+   184 00000111 415F                    pop r15
+   185 00000113 415E                    pop r14
+   186 00000115 415D                    pop r13
+   187 00000117 415C                    pop r12
+   188 00000119 415B                    pop r11
+   189 0000011B 415A                    pop r10
+   190 0000011D 4159                    pop r9
+   191 0000011F 4158                    pop r8
+   192 00000121 5E                      pop rsi
+   193 00000122 5F                      pop rdi
+   194 00000123 5A                      pop rdx
+   195 00000124 59                      pop rcx
+   196 00000125 5B                      pop rbx
+   197 00000126 5D                      pop rbp               ;Restore the base pointer of the stack frame of the caller. 
+   198                                  ;Now the system stack is in the same state it was when this function began execution.
+   199                                  
+   200 00000127 C3                      ret                                                         ;Pop a qword from the stack into rip, and continue executing.
+   201                                  ;========== End of program hello_world.asm ================================================================================================================================
+   202                                  ;========1=========2=========3=========4=========5=========6=========7=========8=========9=========0=========1=========2=========3=========4=========5=========6=========7**
