@@ -12,6 +12,10 @@
 ;   Name: Strings I/O
 ;   Programming Language: X86_64 and C++
 ;   Date Written: August 25, 2021
+;
+;Translator information
+;  Linux: nasm -f elf64 -l hello.lis -o hello.o hello.asm
+
 
 
 extern printf                   ;C funtion for standard output

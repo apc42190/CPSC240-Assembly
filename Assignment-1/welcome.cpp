@@ -13,6 +13,10 @@
 //   Programming Language: X86_64 and C++
 //   Date Written: August 25, 2021 
 
+//Translator information
+//  Gnu compiler: g++ -c -m64 -Wall -fno-pie -no-pie -l good-moring.lis -o good_morning.o good_morning.cpp -std=c++2a
+//  Gnu linker:   g++ -m64 -std=c++2a -o go.out hello.o good_morning.o -fno-pie -no-pie 
+
 
 #include <iostream>
 #include <stdio.h>
