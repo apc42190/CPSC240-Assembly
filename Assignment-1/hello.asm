@@ -12,6 +12,9 @@
 ;   Name: Strings I/O
 ;   Programming Language: X86_64 and C++
 ;   Date Written: August 25, 2021
+;   Purpose: Demonstrates input, manipulation, 
+;       and output of strings in X86 Assembly
+;       as well as interaction between X86 and C++
 ;
 ;Translator information
 ;  Linux: nasm -f elf64 -l hello.lis -o hello.o hello.asm
@@ -153,12 +156,12 @@ hello:
     mov rsi, sympathize
     call printf
 
-
-    ;stores return code '8' in xmm0 to say that all is well
-    mov rax, 8
+    ;stores name in xmm0 to return to c++
+    mov rax, name
     push rax
     movsd xmm0, [rsp]
-    pop rax 
+    pop rax
+
 
     ;epilog: returns stack to state prior to the assembly fuction
     popf
