@@ -12,9 +12,25 @@
 ;   Name: Float I/O
 ;   Programming Language: X86_64 and C
 ;   Date Written: August 31, 2021
+;   Date of Last Update: September 18, 2021
+;   Status: Completed
+;   Files needed for complete program:
+;       triangle.asm
+;       pythagoras.c
+;   References: 
+;       Seyfarth: Chapter 11
+;       Floyd Holliday
+;
+;Purpose: This program demonstrates the input, output, and manipulation(addition, division, multiplication, sqrt) of
+;   64 bit floating point numbers in assembly as well as the use of xmm/SSE registers
 ;
 ;Translator information
 ;  Linux: nasm -f elf64 -l triangle.lis -o triangle.o triangle.asm
+;
+;File info:
+;   Name: triangle.asm
+;   Language: X86_64 Assembly with Intel syntax
+
 
 
 extern strlen

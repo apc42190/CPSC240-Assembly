@@ -12,12 +12,21 @@
 ;   Name: Strings I/O
 ;   Programming Language: X86_64 and C++
 ;   Date Written: August 25, 2021
-;   Purpose: Demonstrates input, manipulation, 
+;   Date Last Updated: September 18, 2021
+;   Files needed for complete program: hello.asm, welcome.cpp
+;   Status: Completed
+;   
+;Purpose: Demonstrates input, manipulation, 
 ;       and output of strings in X86 Assembly
 ;       as well as interaction between X86 and C++
+; 
 ;
 ;Translator information
 ;  Linux: nasm -f elf64 -l hello.lis -o hello.o hello.asm
+;
+;This file contains:
+;   File Name: hello.asm
+;   X86_64 Intel-syntax Assembly
 
 
 
