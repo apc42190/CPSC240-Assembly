@@ -25,10 +25,11 @@ extern int triangle();
 int main() {
     printf("%s", "Welcome to the Right Triangles program maintained by Aaron Cope.\n");
     printf("%s", "If errors are discovered please report them to Aaron Cope at apc42190@csu.fullerton.edu for a quick fix.\n");
-    int return_code = 99;
+    double return_code = -99.999;
     return_code = triangle();
-    printf("%s", "Assembly code succeeded with return code ");
-    printf("%i", return_code);
+    printf("%s", "\nThe main function recieved the number ");
+    printf("%lf", return_code);
+    printf("%s", " and plans to keep it.\nAn integer 0 will be returned to the operating system. Bye.\n");
 
     return 0;
 }

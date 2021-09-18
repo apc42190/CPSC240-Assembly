@@ -1,4 +1,3 @@
-rm *.out
 echo "Assemble triangle.asm"
 nasm -f elf64 -l triangle.lis -o triangle.o triangle.asm -g -gdwarf
 echo "Compile pythagoras.c"
@@ -10,3 +9,4 @@ gdb ./pythagoras.out
 echo "------Program End------"
 rm *.o
 rm *.lis
+rm *.out
