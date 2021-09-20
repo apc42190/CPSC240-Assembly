@@ -45,7 +45,7 @@ global triangle
 
 ;Defining the max length of user inputs
 max_name_size equ 20
-max_title_size equ 10
+max_title_size equ 15
 max_side_size equ 6
 two_point_zero equ 0x4000000000000000
 
@@ -195,7 +195,7 @@ triangle:
     mov byte [rsi + r13 - 1], "."           ;replace newline character with '.'
     call printf
 
-    movsd xmm0, xmm8            
+    movsd xmm0, xmm8           
     
 
 

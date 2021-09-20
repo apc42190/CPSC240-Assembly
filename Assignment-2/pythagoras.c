@@ -35,7 +35,7 @@
 #include <stdio.h>
 #include <math.h>
 
-extern int triangle();
+extern double triangle();
 
 int main() {
     printf("%s", "Welcome to the Right Triangles program maintained by Aaron Cope.\n");
