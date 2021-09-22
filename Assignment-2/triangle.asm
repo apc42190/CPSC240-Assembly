@@ -44,8 +44,8 @@ extern strtod
 global triangle
 
 ;Defining the max length of user inputs
-max_name_size equ 20
-max_title_size equ 15
+max_name_size equ 1024
+max_title_size equ 1024
 max_side_size equ 6
 two_point_zero equ 0x4000000000000000
 
