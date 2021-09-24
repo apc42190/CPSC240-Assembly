@@ -1,0 +1,147 @@
+c
+b main
+b 42
+b 49
+b 50
+b triangle.asm:80
+b triangle.asm:94
+b triangle.asm:159
+b triangle.asm:198
+ignore 3 1
+i b
+r
+n
+p/x $rsp
+p/x $rbp
+p/t $rip
+p/d $rdx
+n
+p/d ($rbp - $rsp) / 8 + 1
+x/1xg $rsp
+x/1xg $rbp
+x/1xg $rsp
+x/1xg $rbp
+n
+n
+s
+n
+n
+n
+n
+n
+n
+n
+n
+n
+n
+n
+n
+n
+n
+n
+i r
+
+
+x/s &promt_name
+x/45xb &promt_name
+p/x &promt_name
+n
+n
+n
+n
+n
+n
+n
+n
+Cope
+n
+n
+n
+n
+n
+n
+n
+Mr
+x/2cb &title
+p/x &title
+n
+n
+n
+n
+n
+n
+n
+n
+n
+3.5
+n
+n
+n
+n
+n
+n
+n
+n
+n
+4.0
+n
+n
+n
+n
+n
+n
+n
+n
+n
+n
+n
+n
+n
+n
+n
+n
+n
+n
+n
+n
+n
+n
+p/d $xmm0.v2_double[0]
+p/x $xmm0.v2_double[0]
+p/d ($rbp - $rsp) / 8 + 1
+n
+n
+n
+n
+n
+n
+n
+n
+n
+n
+n
+n
+n
+n
+n
+n
+n
+n
+n
+n
+n
+n
+n
+n
+n
+n
+n
+n
+n
+n
+n
+n
+n
+n
+n
+p/d ($rbp - $rsp) / 8 - 1
