@@ -38,7 +38,6 @@ extern stdin
 extern scanf
 extern fgets
 extern printf
-extern strtod
 
 
 global triangle
