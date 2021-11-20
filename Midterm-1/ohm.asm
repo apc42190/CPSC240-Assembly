@@ -9,7 +9,6 @@ extern scanf
 extern fgets
 extern printf
 extern strcat
-extern fflush
 
 global ohm
 

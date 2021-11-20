@@ -1,4 +1,3 @@
-
 extern printf
 extern atof
 extern fgets
