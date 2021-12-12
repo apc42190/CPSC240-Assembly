@@ -10,3 +10,4 @@ echo "------Program Start------"
 echo "------Program End------"
 rm *.o
 rm *.lis
+rm *.out

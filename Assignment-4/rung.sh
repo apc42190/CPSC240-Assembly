@@ -9,4 +9,5 @@ echo "------Program Start------"
 gdb ./maxwell.out
 echo "------Program End------"
 rm *.o
+rm *.out
 rm *.lis

@@ -28,13 +28,13 @@
 
 extern printf
 extern scanf
+extern clock_speed
 
 global clock_asm
 
 
 nine_point_eight equ 0x402399999999999A
 two_point_zero equ 0x4000000000000000
-clock_speed equ 0x400A57143393AB43
 
 section .data
 
@@ -42,8 +42,9 @@ section .data
     current db "The current clock time is %ld ticks.", 10, 0
     height_p db "Please enter the height in meters of the dropped marble: ", 0
     earth db "The marble will reach earth after %1.8lf seconds.", 10, 0
-    execution db "The execution time was %ld tics which equals %1.8lf ns", 10, 0
-   ;wish db "Aaron wishes you a nice day.", 10, 0
+    execution db "The execution time was %ld tics which equals %1.8lf ns.", 10, 0
+    print_speed db "The clock_speed is %1.9lf.", 10, 0
+    wish db "Aaron wishes you a nice day.", 10, 0
     string_format db "%s", 0
     double_format db "%lf", 0
 
@@ -122,11 +123,14 @@ clock_asm:
 
     sub r14, r13
 
+    call clock_speed
+    movsd xmm9, xmm0
+    mov rax, 1
+    mov rdi, print_speed
+    call printf
+
     cvtsi2sd xmm8, r14
-    mov r8, clock_speed
-    push r8
-    divsd xmm8, [rsp]
-    pop r8
+    divsd xmm8, xmm9
 
     movsd xmm0, xmm8
     mov rax, 1

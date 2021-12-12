@@ -10,3 +10,4 @@ gdb ./clock.out
 echo "------Program End------"
 rm *.o
 rm *.lis
+rm *.out

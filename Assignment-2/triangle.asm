@@ -141,7 +141,7 @@ triangle:
     movsd xmm8, xmm6                ;make copy of side 1
     movsd xmm9, xmm7                ;make copy of side 2
     
-    ;Find are of triangle
+    ;Find area of triangle
     mulsd xmm6, xmm7                ;base * height; multiply side 1 and side 2 and store it in xmm0
     mov r15, two_point_zero         ;put 2.0 in r15
     push r15                        ;put r15 on the top of the stack
