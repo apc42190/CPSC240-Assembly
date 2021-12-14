@@ -127,7 +127,7 @@ triangle:
     pop rax 
     pop rax
 
-    ;retrieve side 2 the same as side
+    ;retrieve side 2 the same as side 1
     push qword 0
     push qword 0
     mov qword rax, 0
